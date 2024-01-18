@@ -1,7 +1,7 @@
 # Import OS Module to allow for creation of path files across all OS 
 import os
 
-# Module for reading CSV files
+# Module for reading CSV files and exporting a text file
 import csv
 csvpath = os.path.join('Resources', 'election_data.csv')
 filepath = os.path.join('Resources', 'election_data.txt')
@@ -10,8 +10,6 @@ filepath = os.path.join('Resources', 'election_data.txt')
 voter_id = []
 county = []
 candidate = []
-new_candidate_list = []
-candidate_name = 0
 vote_stockham = 0
 vote_degette = 0
 vote_doane = 0
@@ -37,6 +35,14 @@ with open(csvpath) as csvfile:
             vote_degette = vote_degette + 1
         elif row[2] == "Raymon Anthony Doane":
             vote_doane = vote_doane + 1
+            
+        # Find the winner based on popular vote
+        if vote_stockham > vote_degette and vote_doane:
+            winner = "Charles Casper Stockham"
+        elif vote_degette > vote_stockham and vote_doane:
+            winner = "Diana DeGette"
+        else: 
+            winner = "Raymon Anthony Doane"
    
 # Calculate percentage of votes per candidate
     percent_stockham = round((vote_stockham / total_votes) * 100, 3) 
@@ -51,7 +57,7 @@ print(f"Charles Casper Stockham: {percent_stockham}% ({vote_stockham})")
 print(f"Diana Degette: {percent_degette}% ({vote_degette})")
 print(f"Raymon Anthony Doane: {percent_doane}% ({vote_doane})")
 print("-------------------------")
-print(f"Winner:")
+print(f"Winner: {winner}")
 print("-------------------------")
 
 # Export results to text file
@@ -64,5 +70,5 @@ with open(filepath, "w") as results:
     results.write(f"Diana Degette: {percent_degette}% ({vote_degette})\n")
     results.write(f"Raymon Anthony Doane: {percent_doane}% ({vote_doane})\n")
     results.write("-------------------------\n")
-    results.write(f"Winner:\n")
+    results.write(f"Winner: {winner}\n")
     results.write("-------------------------\n")
